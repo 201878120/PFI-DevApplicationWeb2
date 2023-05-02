@@ -133,6 +133,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Countries.cs" />
     <Compile Include="Models\DB.cs" />
@@ -211,6 +212,7 @@
     <Content Include="App_Data\UnverifiedEmails.json" />
     <Content Include="App_Data\Users.json" />
     <Content Include="App_Data\UserTypes.json" />
+    <Content Include="App_Data\Messages.json" />
     <None Include="Properties\PublishProfiles\ChatManager2023 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\MDB2023 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\MDB2023 - Web Deploy1.pubxml" />
@@ -309,6 +311,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties app_3data_4messages_1json__JsonSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

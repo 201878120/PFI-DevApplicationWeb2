@@ -1,0 +1,30 @@
+[
+  {
+    "Id": 1,
+    "FromUserId": 1,
+    "ToUserId": 2,
+    "WrittenDate": "2023-03-17T17:51:50",
+    "Content": "un message envoyé"
+  },
+  {
+    "Id": 2,
+    "FromUserId": 2,
+    "ToUserId": 1,
+    "WrittenDate": "2023-03-17T17:52:50",
+    "Content": "message recu"
+  },
+  {
+    "Id": 3,
+    "FromUserId": 1,
+    "ToUserId": 3,
+    "WrittenDate": "2023-03-17T17:53:50",
+    "Content": "un message envoyé 2"
+  },
+  {
+    "Id": 4,
+    "FromUserId": 3,
+    "ToUserId": 1,
+    "WrittenDate": "2023-03-17T17:54:50",
+    "Content": "message recu 2"
+  }
+]
