@@ -1,6 +1,8 @@
 ﻿using ChatManager.Models;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -37,10 +39,12 @@ namespace ChatManager.Controllers
 
             foreach(Dictionary<string, string> ami in amis)
             {
+                string selected = "unselectedTarget";
+                if (Session["currentChattedId"] != null) if (ami["UserId"] == Session["currentChattedId"].ToString()) selected = "selectedTarget";
                 s += 
-                "<div class=\"unselectedTarget\" userid=\"" + ami["UserId"] + "\">\r\n" +
-                    "<div class=\"UserSmallAvatar\" title=\"" + ami["Name"] + "\" \r\n" +
-                        "style=\"background: url(/Images_Data/User_Avatars/" + ami["Image"] + ".Jpeg) \" >" +
+                "<div class='" + selected + "' userid='" + ami["UserId"] + "'>\r\n" +
+                    "<div class='UserSmallAvatar' title='" + ami["Name"] + "' \r\n" +
+                        "style='background: url(/Images_Data/User_Avatars/" + ami["Image"] + ".Jpeg)' >\r\n" +
                     "</div>\r\n" +
                 "</div>\r\n";
             }
@@ -51,17 +55,21 @@ namespace ChatManager.Controllers
         public ContentResult GetMessages()
         {
             User currentUser = DB.Users.FindUser((int)Session["currentLoginId"]);
-            User otherUser = DB.Users.FindUser((int)Session["currentChattedId"]);
-            string s = 
-            "<div class='messagesHeader'>" +
-                "<h4>Conversation avec</h4>" +
-                "<div class='userItem'>" + 
-                    "<div class='UserMediumAvatar'" + 
-                        "style='background: url(/Images_Data/User_Avatars/" + otherUser.Avatar + ".Jpeg)'>" +
+            string s = "";
+            if (Session["currentChattedId"] != null)
+            {
+                User otherUser = DB.Users.FindUser((int)Session["currentChattedId"]);
+                s =
+                "<div class='messagesHeader'>" +
+                    "<h4>Conversation avec</h4>" +
+                    "<div class='userItem'>" +
+                        "<div class='UserMediumAvatar'" +
+                            "style='background: url(/Images_Data/User_Avatars/" + otherUser.Avatar + ".Jpeg)'>" +
+                        "</div>" +
+                        "<div class='ellipsis'>" + otherUser.FirstName + otherUser.LastName + "</div>" +
                     "</div>" +
-                    "<div class='ellipsis'>" + otherUser.FirstName + otherUser.LastName + "</div>" + 
-                "</div>" + 
-            "</div>";
+                "</div>";
+            }
             //Session["currentLoginId"]
             //Session["currentChattedId"]
             return Content(s, "text/html");
