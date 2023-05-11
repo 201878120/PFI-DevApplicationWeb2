@@ -1,0 +1,18 @@
+﻿@model IEnumerable<(string, int, string)>
+
+@foreach ((string name, int id, string image) ami in Model)
+{
+    string selected = "unselectedTarget";
+    if (Session["currentChattedId"] != null)
+    {
+        if (ami.id == (int)Session["currentChattedId"]) {
+            selected = "selectedTarget";
+        }
+    }
+    string img = "/Images_Data/User_Avatars/" + ami.image + ".Jpeg";
+    <div class='@selected' userid='@ami.id'>
+        <div class='UserSmallAvatar' title='@ami.name'
+             style='background: url(@img)'>
+        </div>
+    </div>
+}

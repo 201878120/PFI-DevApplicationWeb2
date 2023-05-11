@@ -17,62 +17,24 @@ namespace ChatManager.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ContentResult GetFriendsList()
+        public PartialViewResult GetFriendsList()
         {
-            string s = "";
-            List<Dictionary<string, string>> amis = new List<Dictionary<string, string>>();
-            Dictionary<string, string> c = new Dictionary<string, string>
+            List<(string, int, string)> amis = new List<(string, int, string)>
             {
-                { "Name", "Saliha Yacoub" },
-                { "UserId", "2" },
-                { "Image", "4491ed49-2848-4618-b131-7036cb07126f" }
+                ("Saliha Yacoub", 2, "4491ed49-2848-4618-b131-7036cb07126f"),
+                ("Stéphane Chassé", 3, "89ca9b58-9e3d-4c21-bb08-369f8f04b2fb")
             };
-            amis.Add(c);
-            Dictionary<string, string> c2 = new Dictionary<string, string>
-            {
-                { "Name", "Stéphane Chassé" },
-                { "UserId", "3" },
-                { "Image", "89ca9b58-9e3d-4c21-bb08-369f8f04b2fb" }
-            };
-            amis.Add(c2);
-
-            foreach(Dictionary<string, string> ami in amis)
-            {
-                string selected = "unselectedTarget";
-                if (Session["currentChattedId"] != null) if (ami["UserId"] == Session["currentChattedId"].ToString()) selected = "selectedTarget";
-                s += 
-                "<div class='" + selected + "' userid='" + ami["UserId"] + "'>\r\n" +
-                    "<div class='UserSmallAvatar' title='" + ami["Name"] + "' \r\n" +
-                        "style='background: url(/Images_Data/User_Avatars/" + ami["Image"] + ".Jpeg)' >\r\n" +
-                    "</div>\r\n" +
-                "</div>\r\n";
-            }
-            return Content(s, "text/html");
+            return PartialView(amis);
         }
 
-        [HttpGet]
-        public ContentResult GetMessages()
+        public PartialViewResult GetMessages()
         {
-            User currentUser = DB.Users.FindUser((int)Session["currentLoginId"]);
-            string s = "";
+            User currentUser = OnlineUsers.GetSessionUser();
             if (Session["currentChattedId"] != null)
             {
                 User otherUser = DB.Users.FindUser((int)Session["currentChattedId"]);
-                s =
-                "<div class='messagesHeader'>" +
-                    "<h4>Conversation avec</h4>" +
-                    "<div class='userItem'>" +
-                        "<div class='UserMediumAvatar'" +
-                            "style='background: url(/Images_Data/User_Avatars/" + otherUser.Avatar + ".Jpeg)'>" +
-                        "</div>" +
-                        "<div class='ellipsis'>" + otherUser.FirstName + otherUser.LastName + "</div>" +
-                    "</div>" +
-                "</div>";
-            }
-            //Session["currentLoginId"]
-            //Session["currentChattedId"]
-            return Content(s, "text/html");
+                return PartialView(DB.Messages.GetConversation(currentUser.Id, (int)Session["currentChattedId"]));
+            } else return null;
         }
 
         [HttpGet]
@@ -82,21 +44,28 @@ namespace ChatManager.Controllers
         }
 
         [HttpGet]
-        public JsonResult Send(string message)
+        public void Send(string message)
         {
-            return Json("fake", JsonRequestBehavior.AllowGet);
+            Message m = new Message();
+            User currentUser = OnlineUsers.GetSessionUser();
+            m.FromUserId = currentUser.Id;
+            m.ToUserId = (int)Session["currentChattedId"];
+            m.Content = message;
+            DB.Messages.Create(m);
         }
 
         [HttpGet]
-        public JsonResult Update(int id, string message)
+        public void Update(int id, string message)
         {
-            return Json("fake", JsonRequestBehavior.AllowGet);
+            Message m = DB.Messages.FindMessage(id);
+            m.Content = message;
+            DB.Messages.Update(m);
         }
 
         [HttpGet]
-        public JsonResult Delete(int id)
+        public void Delete(int id)
         {
-            return Json("fake", JsonRequestBehavior.AllowGet);
+            DB.Messages.Delete(id);
         }
     }
 }

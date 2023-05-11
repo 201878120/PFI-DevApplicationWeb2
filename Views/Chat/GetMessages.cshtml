@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ChatManager.Models.Message>
+
+<div class='messagesHeader'>
+    <h4>Conversation avec</h4>
+    @Helper.AvatarUser(ChatManager.Models.DB.Users.FindUser((int)Session["currentChattedId"]))
+</div>
+@{
+    DateTime lastDate = DateTime.MinValue;
+}
+@foreach (var message in Model)
+{
+
+    if (lastDate.AddMinutes(30) <= message.WrittenDate)
+    {
+        lastDate = message.WrittenDate;
+        <div class='messageTime'>@message.WrittenDate.ToString("dd MMMM yyyy - H:mm")</div>
+    }
+    if (message.FromUserId != (int)Session["currentChattedId"])
+    {
+        <div class='sentLayout'>
+            <div class='sent' title='@message.WrittenDate.Hour:@message.WrittenDate.Minute' id='sent_@message.Id' utc='-4'>
+                <span>@Helper.ParseContent(message.Content)</span>
+            </div>
+        </div>
+        <div class='editMessage' id='edit_@message.Id' style='display: none;'>
+            <input id='@message.Id' value='@message.Content' class='sent form-control'>
+            <span id='update_@message.Id' class='icon fa fa-check smallerIcon' title='Modifier ce message' data-placement='bottom' />
+            <span id='delete_@message.Id' class='icon fa fa-times smallerIcon' title='Effacer ce message' data-placement='bottom' />
+        </div>
+    }
+    else
+    {
+        <div class='receivedLayout'>
+            <div class='received' title='@message.WrittenDate.Hour:@message.WrittenDate.Minute'>
+                <span>@Helper.ParseContent(message.Content)</span>
+            </div>
+        </div>
+    }
+}
