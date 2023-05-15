@@ -6,7 +6,13 @@
     {
         bool isOnline = ChatManager.Models.OnlineUsers.IsOnLine(item.Id);
         <div class="userContainer" style="font-size:14px;">
-                @Helper.AvatarUser(item, "UserSmallAvatar")
+            @if (item.UserTypeId != 1)
+            {
+                <a href="@Url.Action("ModifyUser", "Accounts", new { id = item.Id })">
+                    @Helper.AvatarUser(item, "UserSmallAvatar")
+                </a>
+            }
+            else { @Helper.AvatarUser(item, "UserSmallAvatar") }
             <div style="text-align:center" title="Status de connexion">
                 @Helper.OnLineStatusIcon(isOnline, item.Blocked)
             </div>

@@ -271,8 +271,11 @@
     <Content Include="Views\Chat\Index.cshtml" />
     <Content Include="Views\Chat\GetMessages.cshtml" />
     <Content Include="Views\Chat\GetFriendsList.cshtml" />
+    <Content Include="Views\Accounts\ModifyUser.cshtml" />
+    <Content Include="Views\Chat\ModerateMessages.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\Admin\" />
     <Folder Include="Views\Friendships\" />
   </ItemGroup>
   <ItemGroup>

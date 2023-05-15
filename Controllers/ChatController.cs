@@ -17,6 +17,12 @@ namespace ChatManager.Controllers
             return View();
         }
 
+        [OnlineUsers.PowerUserAccess]
+        public ActionResult ModerateMessages()
+        {
+            return View();
+        }
+
         public PartialViewResult GetFriendsList()
         {
             List<(string, int, string)> amis = new List<(string, int, string)>
