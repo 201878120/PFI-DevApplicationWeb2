@@ -19,13 +19,9 @@ namespace ChatManager.Controllers
 
         public PartialViewResult GetFriendsList()
         {
-            // TODO: Implement friendships module
-            List<(string, int, string)> amis = new List<(string, int, string)>
-            {
-                ("Saliha Yacoub", 2, "4491ed49-2848-4618-b131-7036cb07126f"),
-                ("Stéphane Chassé", 3, "89ca9b58-9e3d-4c21-bb08-369f8f04b2fb")
-            };
-            return PartialView(amis);
+            // Sorting here instead of calling SortedUsers() to minimize overhead
+            int currentUserId = OnlineUsers.GetSessionUser().Id;
+            return PartialView(DB.Users.ToList().Where(u => DB.Friendships.AreFriends(currentUserId, u.Id)).OrderBy(u => u.FirstName).ThenBy(u => u.LastName));
         }
 
         public PartialViewResult GetMessages()

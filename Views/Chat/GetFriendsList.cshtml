@@ -1,18 +1,18 @@
 ﻿<!-- TODO: Implement friendship module -->
-@model IEnumerable<(string, int, string)>
+@model IEnumerable<ChatManager.Models.User>
 
-@foreach ((string name, int id, string image) ami in Model)
+@foreach (ChatManager.Models.User ami in Model)
 {
     string selected = "unselectedTarget";
     if (Session["currentChattedId"] != null)
     {
-        if (ami.id == (int)Session["currentChattedId"]) {
+        if (ami.Id == (int)Session["currentChattedId"]) {
             selected = "selectedTarget";
         }
     }
-    string img = "/Images_Data/User_Avatars/" + ami.image + ".Jpeg";
-    <div class='@selected' userid='@ami.id'>
-        <div class='UserSmallAvatar' title='@ami.name'
+    string img = "/Images_Data/User_Avatars/" + ami.Avatar + ".Jpeg";
+    <div class='@selected' userid='@ami.Id'>
+        <div class='UserSmallAvatar' title='@ami.GetFullName()'
              style='background: url(@img)'>
         </div>
     </div>
