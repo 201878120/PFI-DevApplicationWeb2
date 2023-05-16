@@ -1,0 +1,26 @@
+﻿@model ChatManager.Models.User
+
+<h2>Modification d'usager</h2>
+<hr />
+
+<div class="main">
+    @{
+        ViewBag.AdminEdit = true;
+        ViewBag.Title = "Modification d'usager";
+        Html.RenderPartial("ProfilForm");
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/NotificationsHandler")
+
+    <script defer>
+        $("#ConfirmEmail").val($("#Email").val());
+        $.validator.addMethod(
+            "UserTypeId",
+            function (value, element) { return ($("input[name='UserTypeId']:checked").val() != undefined); },
+            "Choix obligatoire"
+        );
+    </script>
+}

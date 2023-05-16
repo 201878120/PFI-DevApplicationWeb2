@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ChatManager.Controllers
@@ -255,6 +256,60 @@ namespace ChatManager.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken()]
         public ActionResult Profil(User user)
+        {
+            User currentUser = OnlineUsers.GetSessionUser();
+            user.Id = currentUser.Id;
+            user.Verified = currentUser.Verified;
+            user.UserTypeId = currentUser.UserTypeId;
+            user.Blocked = currentUser.Blocked;
+            user.Avatar = currentUser.Avatar;
+            user.CreationDate = currentUser.CreationDate;
+
+            string newEmail = "";
+            if (ModelState.IsValid)
+            {
+                if (user.Password == (string)Session["UnchangedPasswordCode"])
+                    user.Password = user.ConfirmPassword = currentUser.Password;
+
+                if (user.Email != currentUser.Email)
+                {
+                    newEmail = user.Email;
+                    user.Email = user.ConfirmEmail = currentUser.Email;
+                }
+
+                if (DB.Users.Update(user))
+                {
+                    if (newEmail != "")
+                    {
+                        SendEmailChangedVerification(user, newEmail);
+                        return RedirectToAction("EmailChangedAlert");
+                    }
+                    else
+                        return RedirectToAction("About", "Home");
+                }
+                else
+                    return RedirectToAction("Report", "Errors", new { message = "Échec de modification de profil" });
+            }
+            ViewBag.Genders = SelectListUtilities<Gender>.Convert(DB.Genders.ToList());
+            return View(currentUser);
+        }
+
+        [OnlineUsers.AdminAccess]
+        public ActionResult ModifyUser(int id)
+        {
+            OnlineUsers.GetSessionUser().AcceptNotification = true;
+            ViewBag.UserTypes = SelectListUtilities<UserType>.Convert(DB.UserTypes.ToList());
+            User userToEdit = DB.Users.FindUser(id);
+            if (userToEdit != null)
+            {
+                if (userToEdit.UserTypeId != 1) return View(userToEdit);
+            }
+            return RedirectToAction("UserList");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
+        public ActionResult ModifyUser(User user)
         {
             User currentUser = OnlineUsers.GetSessionUser();
             user.Id = currentUser.Id;

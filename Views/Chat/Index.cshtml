@@ -3,7 +3,11 @@
 }
 
 <div style="display:grid; grid-template-columns: 65px auto; align-items:center">
-    <img src="../favicon.png" style="width:56px">
+    @if (ChatManager.Models.OnlineUsers.GetSessionUser().UserTypeId != 3)
+    {
+        <a href="@Url.Action("ModerateMessages", "Chat")"><img src="../favicon.png" style="width:56px"></a>
+    }
+    else { <img src="../favicon.png" style="width:56px"> }
     <h3>Salle de discussions</h3>
 </div>
 <hr />

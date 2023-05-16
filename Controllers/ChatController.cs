@@ -17,6 +17,12 @@ namespace ChatManager.Controllers
             return View();
         }
 
+        [OnlineUsers.PowerUserAccess]
+        public ActionResult ModerateMessages()
+        {
+            return View();
+        }
+
         public PartialViewResult GetFriendsList()
         {
             // Sorting here instead of calling SortedUsers() to minimize overhead

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<ChatManager.Models.User>
+@{
+    var currentUser = ChatManager.Models.OnlineUsers.GetSessionUser();
+}
+@foreach (var targetUser in Model)
+{
+    if (targetUser != currentUser)
+    {
+
+        <div class="friendContainer" style="font-size:14px;">
+            <a href="mailto:@targetUser.Email" title="Compte créé le @targetUser.CreationDate">
+                @Helper.AvatarUser(targetUser)
+            </a>
+            @Helper.OnLineStatusIcon(ChatManager.Models.OnlineUsers.IsOnLine(targetUser.Id), targetUser.Blocked)
+            @{
+                var fullname = targetUser.GetFullName();
+                if (targetUser.Blocked)
+                {
+                    <span class="icon fa red fa-times-circle" title="@fullname a été bloqué par l'administrateur"></span>
+                }
+                else
+                {
+                    var friendship = ChatManager.Models.DB.Friendships.GetFriendship(currentUser.Id, targetUser.Id);
+                    var friendshipStatus = friendship is null ? ChatManager.Models.FriendshipStatus.None : friendship.Status;
+                    switch (friendshipStatus)
+                    {
+                        case ChatManager.Models.FriendshipStatus.None:
+                            <span class="command icon fa green fa-plus-circle" url="/Friendships/SendFriendshipRequest/@targetUser.Id" message="Envoyer une demande d'amitié à @fullname" title="Envoyer une demande d'amitié à @fullname"></span>
+                            break;
+                        case ChatManager.Models.FriendshipStatus.Friends:
+                            <span class="icon fa green fa-check-circle" title="Vous êtes amis avec @fullname"></span>
+                            <span class="command icon fa red fa-times" url="/Friendships/RemoveFriendship/@targetUser.Id" message="Retirer l'amitié avec @fullname" title="Retirer l'amitié avec @fullname"></span>
+                            break;
+                        case ChatManager.Models.FriendshipStatus.FriendRequestSent:
+                            if (currentUser.Id == friendship.TargetUserId)
+                            {
+                                <span class="command icon fa green fa-check" url="/Friendships/AcceptFriendshipRequest/@targetUser.Id" message="Accepter la demande d'amitié de @fullname" title="Accepter la demande d'amitié de @fullname"></span>
+                                <span class="command icon fa red fa-times" url="/Friendships/DeclineFriendshipRequest/@targetUser.Id" message="Décliner la demande d'amitié de @fullname" title="Décliner la demande d'amitié de @fullname"></span>
+                            }
+                            else if (friendship.TargetUserId == targetUser.Id)
+                            {
+                                <span class="icon fa green fa-clock-o" title="Requête d'amitié avec @fullname en attente"></span>
+                                <span class="command icon fa red fa-times" url="/Friendships/RemoveFriendshipRequest/@targetUser.Id" message="Retirer la demande d'amitié avec @fullname" title="Retirer la demande d'amitié avec @fullname"></span>
+                            }
+                            break;
+                        case ChatManager.Models.FriendshipStatus.FriendRequestDeclined:
+                            // If the invoking user declined the last friend request, he can change his mind
+                            if (currentUser.Id == friendship.TargetUserId)
+                            {
+                                <span class="icon fa red fa-times-circle" title="Vous avez décliné de la demande d'amitié avec @fullname"></span>
+                                <span class="command icon fa green fa-plus-circle" url="/Friendships/SendFriendshipRequest/@targetUser.Id" message="Envoyer une demande d'amitié à @fullname" title="Envoyer une demande d'amitié à @fullname"></span>
+                            }
+                            else
+                            {
+                                <span class="icon fa red fa-times-circle" title="Votre demande d'amitié avec @fullname a été déclinée"></span>
+                            }
+                            break;
+                    }
+                }
+            }
+        </div>
+    }
+}
