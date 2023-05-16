@@ -274,10 +274,10 @@
     <Content Include="Views\Chat\Index.cshtml" />
     <Content Include="Views\Chat\GetMessages.cshtml" />
     <Content Include="Views\Chat\GetFriendsList.cshtml" />
+    <Content Include="Views\Friendships\Index.cshtml" />
+    <Content Include="Views\Friendships\GetFriendShipsStatus.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Friendships\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

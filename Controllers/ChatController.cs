@@ -19,6 +19,7 @@ namespace ChatManager.Controllers
 
         public PartialViewResult GetFriendsList()
         {
+            // TODO: Implement friendships module
             List<(string, int, string)> amis = new List<(string, int, string)>
             {
                 ("Saliha Yacoub", 2, "4491ed49-2848-4618-b131-7036cb07126f"),
