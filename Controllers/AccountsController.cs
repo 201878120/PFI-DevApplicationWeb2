@@ -315,7 +315,9 @@ namespace ChatManager.Controllers
             user.Id = currentUser.Id;
             user.GenderId = currentUser.GenderId;
             user.Password = user.ConfirmPassword = currentUser.Password;
+            user.Avatar = currentUser.Avatar;
             user.CreationDate = currentUser.CreationDate;
+            if (ModelState.ContainsKey("Password")) ModelState["Password"].Errors.Clear();
 
             if (ModelState.IsValid)
             {

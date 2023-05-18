@@ -98,6 +98,20 @@ namespace ChatManager.Models
                 DB.ResetPasswordCommands.Delete(ResetPasswordCommand.Id);
             }
         }
+        private void RemoveMessages(int userId)
+        {
+            List<Message> messagesSent = DB.Messages.ToList().Where(r => r.FromUserId == userId).ToList();
+            List<Message> messagesReceived = DB.Messages.ToList().Where(r => r.ToUserId == userId).ToList();
+            foreach (Message message in messagesSent) DB.Messages.Delete(message.Id);
+            foreach (Message message in messagesSent) DB.Messages.Delete(message.Id);
+        }
+        private void RemoveFriendships(int userId)
+        {
+            List<Friendship> friendsSent = DB.Friendships.ToList().Where(r => r.UserId == userId).ToList();
+            List<Friendship> friendsReceived = DB.Friendships.ToList().Where(r => r.TargetUserId == userId).ToList();
+            foreach (Friendship friend in friendsSent) DB.Messages.Delete(friend.Id);
+            foreach (Friendship friend in friendsReceived) DB.Messages.Delete(friend.Id);
+        }
         public override bool Delete(int userId)
         {
             try
@@ -111,6 +125,8 @@ namespace ChatManager.Models
                     RemoveLogins(userId);
                     RemoveUnverifiedEmails(userId);
                     RemoveResetPasswordCommands(userId);
+                    RemoveMessages(userId);
+                    RemoveFriendships(userId);
                     userToDelete.RemoveAvatar();
                     base.Delete(userId);
                     OnlineUsers.RemoveUser(userToDelete.Id);
