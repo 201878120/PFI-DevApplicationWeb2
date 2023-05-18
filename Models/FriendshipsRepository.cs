@@ -5,6 +5,16 @@ using System.Web;
 
 namespace ChatManager.Models
 {
+    public enum FriendFilters
+    {
+        NOT_FRIEND = 1,
+        REQUEST = 2,
+        PENDING = 4,
+        FRIEND = 8,
+        REFUSED = 16,
+        BLOCKED = 32
+    }
+
     public class FriendshipsRepository : Repository<Friendship>
     {
         public Friendship GetFriendship(int userId1, int userId2)
