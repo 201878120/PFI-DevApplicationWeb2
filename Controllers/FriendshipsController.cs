@@ -1,14 +1,33 @@
 ﻿using ChatManager.Models;
+using System;
 using System.Web.Mvc;
 
 namespace ChatManager.Controllers
 {
     public class FriendshipsController : Controller
     {
+        public enum FriendFilters
+        {
+            NOT_FRIEND=1,
+            REQUEST=2,
+            PENDING=4,
+            FRIEND=8,
+            REFUSED=16,
+            BLOCKED=32
+        }
         // GET: Friendships
         [OnlineUsers.UserAccess]
         public ActionResult Index()
         {
+            if (Session["FriendFilters"] == null)
+            {
+                int newFilter = 0;
+                foreach (var val in Enum.GetValues(typeof(FriendFilters)))
+                {
+                    newFilter |= (int)val;
+                }
+                Session["FriendFilters"] = newFilter;
+            }
             return View();
         }
 
@@ -56,6 +75,42 @@ namespace ChatManager.Controllers
         public PartialViewResult GetFriendShipsStatus()
         {
             return PartialView(DB.Users.SortedUsers());
+        }
+
+        [OnlineUsers.UserAccess]
+        public JsonResult SetFilterNotFriend(bool check)
+        {
+
+        }
+
+        [OnlineUsers.UserAccess]
+        public JsonResult SetFilterRequest(bool check)
+        {
+
+        }
+
+        [OnlineUsers.UserAccess]
+        public JsonResult SetFilterPending(bool check)
+        {
+
+        }
+
+        [OnlineUsers.UserAccess]
+        public JsonResult SetFilterFriend(bool check)
+        {
+
+        }
+
+        [OnlineUsers.UserAccess]
+        public JsonResult SetFilterRefused(bool check)
+        {
+
+        }
+
+        [OnlineUsers.UserAccess]
+        public JsonResult SetFilterBlocked(bool check)
+        {
+
         }
     }
 }
