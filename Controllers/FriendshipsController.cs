@@ -77,40 +77,40 @@ namespace ChatManager.Controllers
             return PartialView(DB.Users.SortedUsers());
         }
 
-        [OnlineUsers.UserAccess]
-        public JsonResult SetFilterNotFriend(bool check)
-        {
+        //[OnlineUsers.UserAccess]
+        //public JsonResult SetFilterNotFriend(bool check)
+        //{
 
-        }
+        //}
 
-        [OnlineUsers.UserAccess]
-        public JsonResult SetFilterRequest(bool check)
-        {
+        //[OnlineUsers.UserAccess]
+        //public JsonResult SetFilterRequest(bool check)
+        //{
 
-        }
+        //}
 
-        [OnlineUsers.UserAccess]
-        public JsonResult SetFilterPending(bool check)
-        {
+        //[OnlineUsers.UserAccess]
+        //public JsonResult SetFilterPending(bool check)
+        //{
 
-        }
+        //}
 
-        [OnlineUsers.UserAccess]
-        public JsonResult SetFilterFriend(bool check)
-        {
+        //[OnlineUsers.UserAccess]
+        //public JsonResult SetFilterFriend(bool check)
+        //{
 
-        }
+        //}
 
-        [OnlineUsers.UserAccess]
-        public JsonResult SetFilterRefused(bool check)
-        {
+        //[OnlineUsers.UserAccess]
+        //public JsonResult SetFilterRefused(bool check)
+        //{
 
-        }
+        //}
 
-        [OnlineUsers.UserAccess]
-        public JsonResult SetFilterBlocked(bool check)
-        {
+        //[OnlineUsers.UserAccess]
+        //public JsonResult SetFilterBlocked(bool check)
+        //{
 
-        }
+        //}
     }
 }
