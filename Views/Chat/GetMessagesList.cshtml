@@ -1,0 +1,11 @@
+﻿@model IEnumerable<ChatManager.Models.Message>
+
+@foreach (var item in Model)
+{
+    ChatManager.Models.User sendee = ChatManager.Models.DB.Users.FindUser(item.FromUserId);
+    ChatManager.Models.User receivee = ChatManager.Models.DB.Users.FindUser(item.ToUserId);
+
+    <div>
+        @Helper.AvatarUser(sendee, "UserSmallAvatar") @Helper.AvatarUser(receivee, "UserSmallAvatar") @item.Content
+    </div>
+}

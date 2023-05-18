@@ -1,6 +1,23 @@
-﻿@{
+﻿@model IEnumerable<ChatManager.Models.Message>
+
+@{
     ViewBag.Title = "ModerateMessages";
 }
 
 <h2>ModerateMessages</h2>
 
+<div class="main">
+    <div id="MessagesContainer">
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/NotificationsHandler")
+
+    <script defer>
+        let GetMessagesList = new PartialRefresh("@Url.Action("GetMessagesList")", "MessagesContainer", 5, UpdateCheckboxChangeCallback);
+
+        function UpdateCheckboxChangeCallback() {
+        }
+    </script>
+}

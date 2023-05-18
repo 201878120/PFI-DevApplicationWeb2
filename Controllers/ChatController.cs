@@ -40,6 +40,16 @@ namespace ChatManager.Controllers
             } else return null;
         }
 
+        [OnlineUsers.AdminAccess(false)] // RefreshTimout = false otherwise periodical refresh with lead to never timed out session
+        public ActionResult GetMessagesList(/*bool forceRefresh = false*/)
+        {
+            /*if (forceRefresh || DB.Messages.)
+            {*/
+                return PartialView(DB.Messages.SortedMessages());
+            /*}
+            return null;*/
+        }
+
         [HttpGet]
         public void SetCurrentTarget(int id)
         {

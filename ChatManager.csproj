@@ -278,10 +278,10 @@
     <Content Include="Views\Friendships\GetFriendShipsStatus.cshtml" />
     <Content Include="Views\Accounts\ModifyUser.cshtml" />
     <Content Include="Views\Chat\ModerateMessages.cshtml" />
+    <Content Include="Views\Chat\GetMessagesList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Admin\" />
-    <Folder Include="Views\Friendships\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

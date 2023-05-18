@@ -83,6 +83,10 @@ namespace ChatManager.Models
                 return null;
             }
         }
+        public IEnumerable<Message> SortedMessages()
+        {
+            return ToList().OrderBy(u => u.WrittenDate);
+        }
         /*public bool EmailAvailable(string email, int excludedId = 0)
         {
             User user = ToList().Where(u => u.Email.ToLower() == email.ToLower()).FirstOrDefault();
