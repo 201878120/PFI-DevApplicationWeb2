@@ -311,40 +311,18 @@ namespace ChatManager.Controllers
         [ValidateAntiForgeryToken()]
         public ActionResult ModifyUser(User user)
         {
-            User currentUser = OnlineUsers.GetSessionUser();
+            User currentUser = DB.Users.FindUser(user.Id);
             user.Id = currentUser.Id;
-            user.Verified = currentUser.Verified;
-            user.UserTypeId = currentUser.UserTypeId;
-            user.Blocked = currentUser.Blocked;
-            user.Avatar = currentUser.Avatar;
+            user.GenderId = currentUser.GenderId;
+            user.Password = user.ConfirmPassword = currentUser.Password;
             user.CreationDate = currentUser.CreationDate;
 
-            string newEmail = "";
             if (ModelState.IsValid)
             {
-                if (user.Password == (string)Session["UnchangedPasswordCode"])
-                    user.Password = user.ConfirmPassword = currentUser.Password;
-
-                if (user.Email != currentUser.Email)
-                {
-                    newEmail = user.Email;
-                    user.Email = user.ConfirmEmail = currentUser.Email;
-                }
-
-                if (DB.Users.Update(user))
-                {
-                    if (newEmail != "")
-                    {
-                        SendEmailChangedVerification(user, newEmail);
-                        return RedirectToAction("EmailChangedAlert");
-                    }
-                    else
-                        return RedirectToAction("About", "Home");
-                }
-                else
-                    return RedirectToAction("Report", "Errors", new { message = "Échec de modification de profil" });
+                if (DB.Users.Update(user)) return RedirectToAction("About", "Home");
+                else return RedirectToAction("Report", "Errors", new { message = "Échec de modification de profil" });
             }
-            ViewBag.Genders = SelectListUtilities<Gender>.Convert(DB.Genders.ToList());
+            ViewBag.UserTypes = SelectListUtilities<UserType>.Convert(DB.UserTypes.ToList());
             return View(currentUser);
         }
         #endregion
