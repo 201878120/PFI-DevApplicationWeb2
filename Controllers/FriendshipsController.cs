@@ -11,18 +11,16 @@ namespace ChatManager.Controllers
         [OnlineUsers.UserAccess]
         public ActionResult Index()
         {
-            if (Session["FriendFilters"] == null)
+            Session["searchQuery"] = "";
+            int newFilter = 0;
+            foreach (var val in Enum.GetValues(typeof(FriendFilters)))
             {
-                int newFilter = 0;
-                foreach (var val in Enum.GetValues(typeof(FriendFilters)))
-                {
-                    newFilter |= (int)val;
-                }
-                Session["FriendFilters"] = newFilter;
+                newFilter |= (int)val;
             }
+            Session["FriendFilters"] = newFilter;
             return View();
         }
-        
+
         public JsonResult AreFriends(int userId1, int userId2)
         {
             return Json(DB.Friendships.AreFriends(userId1, userId2), JsonRequestBehavior.AllowGet);
@@ -33,7 +31,7 @@ namespace ChatManager.Controllers
         {
             User currentUser = OnlineUsers.GetSessionUser();
             return Json(DB.Friendships.SendFriendshipRequest(currentUser.Id, id), JsonRequestBehavior.AllowGet);
-        }        
+        }
 
         [OnlineUsers.UserAccess]
         public JsonResult AcceptFriendshipRequest(int id)
@@ -63,40 +61,41 @@ namespace ChatManager.Controllers
             return Json(DB.Friendships.RemoveFriendship(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
-        private bool PassesFriendFilter(User targetUser)
+        private bool FilterSearchAndFilter(User targetUser)
         {
+            bool matchesFilter = false;
             int friendFilters = (int)Session["FriendFilters"];
-            
+
             if (targetUser.Blocked)
-                return (friendFilters & (int)FriendFilters.BLOCKED) > 0;
-            
-            User currentUser = OnlineUsers.GetSessionUser();
-            Friendship f = DB.Friendships.GetFriendship(currentUser.Id, targetUser.Id);
-            FriendshipStatus status = f is null ? FriendshipStatus.None : f.Status;
-            
-            switch (status)
+                matchesFilter = (friendFilters & (int)FriendFilters.BLOCKED) > 0;
+            else
             {
-                case FriendshipStatus.None:
-                    return (friendFilters & (int)FriendFilters.NOT_FRIEND) > 0;
-                case FriendshipStatus.Friends:
-                    return (friendFilters & (int)FriendFilters.FRIEND) > 0;
-                case FriendshipStatus.FriendRequestSent:
-                    if (currentUser.Id == f.UserId)
-                        return (friendFilters & (int)FriendFilters.PENDING) > 0;
-                    else
-                        return (friendFilters & (int)FriendFilters.REQUEST) > 0;
-                case FriendshipStatus.FriendRequestDeclined:
-                    return (friendFilters & (int)FriendFilters.REFUSED) > 0;
+                User currentUser = OnlineUsers.GetSessionUser();
+                Friendship f = DB.Friendships.GetFriendship(currentUser.Id, targetUser.Id);
+                FriendshipStatus status = f is null ? FriendshipStatus.None : f.Status;
+
+                switch (status)
+                {
+                    case FriendshipStatus.None:
+                        matchesFilter = (friendFilters & (int)FriendFilters.NOT_FRIEND) > 0;
+                        break;
+                    case FriendshipStatus.Friends:
+                        matchesFilter = (friendFilters & (int)FriendFilters.FRIEND) > 0;
+                        break;
+                    case FriendshipStatus.FriendRequestSent:
+                        if (currentUser.Id == f.UserId)
+                            matchesFilter = (friendFilters & (int)FriendFilters.PENDING) > 0;
+                        else
+                            matchesFilter = (friendFilters & (int)FriendFilters.REQUEST) > 0;
+                        break;
+                    case FriendshipStatus.FriendRequestDeclined:
+                        matchesFilter = (friendFilters & (int)FriendFilters.REFUSED) > 0;
+                        break;
+                }
             }
-
-            return false;
+            
+            return matchesFilter && targetUser.GetFullName().Contains((string)Session["searchQuery"]);
         }
-        [OnlineUsers.UserAccess]
-        public PartialViewResult GetFriendShipsStatus()
-        {
-            return PartialView(DB.Users.SortedUsers().Where(PassesFriendFilter));
-        }
-
         private void SetFriendFilterBit(FriendFilters filter, bool check)
         {
             if (check)
@@ -148,6 +147,18 @@ namespace ChatManager.Controllers
         {
             SetFriendFilterBit(FriendFilters.BLOCKED, check);
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [OnlineUsers.UserAccess]
+        public void Search(string text)
+        {
+            Session["searchQuery"] = text;
+        }
+
+        [OnlineUsers.UserAccess]
+        public PartialViewResult GetFriendShipsStatus()
+        {
+            return PartialView(DB.Users.SortedUsers().Where(FilterSearchAndFilter));
         }
     }
 }
