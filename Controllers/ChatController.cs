@@ -12,6 +12,7 @@ namespace ChatManager.Controllers
     public class ChatController : Controller
     {
         // GET: Chat
+        [OnlineUsers.UserAccess]
         public ActionResult Index()
         {
             return View();
@@ -22,7 +23,7 @@ namespace ChatManager.Controllers
         {
             return View();
         }
-
+        [OnlineUsers.UserAccess]
         public PartialViewResult GetFriendsList()
         {
             // Sorting here instead of calling SortedUsers() to minimize overhead
@@ -30,6 +31,7 @@ namespace ChatManager.Controllers
             return PartialView(DB.Users.ToList().Where(u => DB.Friendships.AreFriends(currentUserId, u.Id)).OrderBy(u => u.FirstName).ThenBy(u => u.LastName));
         }
 
+        [OnlineUsers.UserAccess]
         public PartialViewResult GetMessages()
         {
             User currentUser = OnlineUsers.GetSessionUser();
@@ -51,14 +53,17 @@ namespace ChatManager.Controllers
         }
 
         [HttpGet]
+        [OnlineUsers.UserAccess]
         public void SetCurrentTarget(int id)
         {
             Session["currentChattedId"] = id;
         }
 
         [HttpGet]
+        [OnlineUsers.UserAccess]
         public void Send(string message)
         {
+            if (Session["currentChattedId"] == null) return;
             Message m = new Message();
             User currentUser = OnlineUsers.GetSessionUser();
             m.FromUserId = currentUser.Id;
@@ -68,16 +73,23 @@ namespace ChatManager.Controllers
         }
 
         [HttpGet]
+        [OnlineUsers.UserAccess]
         public void Update(int id, string message)
         {
+            User currentUser = OnlineUsers.GetSessionUser();
             Message m = DB.Messages.FindMessage(id);
+            if (currentUser.Id != m.FromUserId) return;
             m.Content = message;
             DB.Messages.Update(m);
         }
 
         [HttpGet]
+        [OnlineUsers.UserAccess]
         public void Delete(int id)
         {
+            User currentUser = OnlineUsers.GetSessionUser();
+            Message m = DB.Messages.Get(id);
+            if (currentUser.Id != m.FromUserId && !currentUser.IsPowerUser) return;
             DB.Messages.Delete(id);
         }
     }

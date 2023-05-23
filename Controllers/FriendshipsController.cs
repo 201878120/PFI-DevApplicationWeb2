@@ -61,6 +61,7 @@ namespace ChatManager.Controllers
             return Json(DB.Friendships.RemoveFriendship(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
+        [OnlineUsers.UserAccess]
         private bool FilterSearchAndFilter(User targetUser)
         {
             bool matchesFilter = false;
@@ -96,6 +97,7 @@ namespace ChatManager.Controllers
             
             return matchesFilter && targetUser.GetFullName().Contains((string)Session["searchQuery"]);
         }
+        [OnlineUsers.UserAccess]
         private void SetFriendFilterBit(FriendFilters filter, bool check)
         {
             if (check)

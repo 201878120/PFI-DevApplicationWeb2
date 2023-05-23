@@ -7,7 +7,8 @@
     {
         <a href="@Url.Action("ModerateMessages", "Chat")"><img src="../favicon.png" style="width:56px"></a>
     }
-    else { <img src="../favicon.png" style="width:56px"> }
+    else
+    { <img src="../favicon.png" style="width:56px">}
     <h3>Salle de discussions</h3>
 </div>
 <hr />
@@ -51,12 +52,12 @@
                     </div>
                 </div>-->
             </div>
-            <div class="sendMessageLayout">
+            <div class="sendMessageLayout" id="sendMessagePanel">
                 <input id="message"
-                       class="form-control"
-                       style="width:100% !important; max-width:1000px !important;"
-                       placeholder="Tapez votre message ici ..."
-                       title="Les urls d'image sont prises en compte.">
+                        class="form-control"
+                        style="width:100% !important; max-width:1000px !important;"
+                        placeholder="Tapez votre message ici ..."
+                        title="Les urls d'image sont prises en compte.">
                 <span id="send" class="icon fa fa-paper-plane" title="Envoyer" data-placement="bottom" />
             </div>
         </div>
@@ -68,34 +69,37 @@
     <script defer>
         let friendsPanelUpdater = new PartialRefresh("/Chat/GetFriendsList", "friendsListContainer", 5, UpdateFriendsCallback);
         let messagesPanelUpdater = new PartialRefresh("/Chat/GetMessages", "messagesPanel", 5, UpdateMessagesCallback);
+        let currentTargetId = @(Session["currentChattedId"] ?? 0);
+        if (currentTargetId == 0)
+            $("#sendMessagePanel").hide();
 
-        function UpdateFriendsCallback() {
-            messagesPanelUpdater.refresh(true);
+                        function UpdateFriendsCallback() {
+                            messagesPanelUpdater.refresh(true);
             $(".unselectedTarget").click(function () {
-                var userId = $(this).attr("userid");
-                ajaxActionCall("/Chat/SetCurrentTarget/" + userId, () => { friendsPanelUpdater.refresh(true); messagesPanelUpdater.refresh(true); });
-            })
+                                var userId = $(this).attr("userid");
+                                ajaxActionCall("/Chat/SetCurrentTarget/" + userId, () => { friendsPanelUpdater.refresh(true); messagesPanelUpdater.refresh(true); $("#sendMessagePanel").show(); });
+                            })
         }
-        let editing = false;
-        function setEditing(value) {
-            editing = value;
-            if (editing)
-                messagesPanelUpdater.pause();
-            else
-                messagesPanelUpdater.restart();
-        }
-        function sendMessage() {
-            var message = $('#message').val();
+                    let editing = false;
+                    function setEditing(value) {
+                        editing = value;
+                        if (editing)
+                            messagesPanelUpdater.pause();
+                        else
+                            messagesPanelUpdater.restart();
+                    }
+                    function sendMessage() {
+                        var message = $('#message').val();
             $('#message').val("");
-            if (message != "") {
-                messagesPanelUpdater.command("/Chat/Send?message=" + message, UpdateMessagesCallback);
-            }
-        }
-        function UpdateMessagesCallback() {
+                        if (message != "") {
+                            messagesPanelUpdater.command("/Chat/Send?message=" + message, UpdateMessagesCallback);
+                        }
+                    }
+                    function UpdateMessagesCallback() {
             $(".editMessage").hide();
             $("#messagesPanel").scrollTop($("#messagesPanel")[0].scrollHeight);
             $('#message').keypress(function (event) {
-                var keycode = (event.keyCode ? event.keyCode : event.which);
+                        var keycode = (event.keyCode ? event.keyCode : event.which);
                 if (keycode == '13') {
                     sendMessage();
                 }
@@ -145,7 +149,7 @@
             })
         }
         $("#send").click(function () {
-            sendMessage();
-        })
+                sendMessage();
+            })
     </script>
 }
