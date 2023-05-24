@@ -23,7 +23,7 @@ namespace ChatManager.Controllers
         {
             return View();
         }
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public PartialViewResult GetFriendsList()
         {
             // Sorting here instead of calling SortedUsers() to minimize overhead
@@ -31,7 +31,7 @@ namespace ChatManager.Controllers
             return PartialView(DB.Users.ToList().Where(u => DB.Friendships.AreFriends(currentUserId, u.Id)).OrderBy(u => u.FirstName).ThenBy(u => u.LastName));
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public PartialViewResult GetMessages()
         {
             User currentUser = OnlineUsers.GetSessionUser();
@@ -53,14 +53,14 @@ namespace ChatManager.Controllers
         }
 
         [HttpGet]
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public void SetCurrentTarget(int id)
         {
             Session["currentChattedId"] = id;
         }
 
         [HttpGet]
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public void Send(string message)
         {
             if (Session["currentChattedId"] == null) return;
@@ -73,7 +73,7 @@ namespace ChatManager.Controllers
         }
 
         [HttpGet]
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public void Update(int id, string message)
         {
             User currentUser = OnlineUsers.GetSessionUser();
@@ -84,7 +84,7 @@ namespace ChatManager.Controllers
         }
 
         [HttpGet]
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public void Delete(int id)
         {
             User currentUser = OnlineUsers.GetSessionUser();

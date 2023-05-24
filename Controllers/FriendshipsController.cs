@@ -21,47 +21,42 @@ namespace ChatManager.Controllers
             return View();
         }
 
-        public JsonResult AreFriends(int userId1, int userId2)
-        {
-            return Json(DB.Friendships.AreFriends(userId1, userId2), JsonRequestBehavior.AllowGet);
-        }
-
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult SendFriendshipRequest(int id)
         {
             User currentUser = OnlineUsers.GetSessionUser();
             return Json(DB.Friendships.SendFriendshipRequest(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult AcceptFriendshipRequest(int id)
         {
             User currentUser = OnlineUsers.GetSessionUser();
             return Json(DB.Friendships.AcceptFriendshipRequest(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult DeclineFriendshipRequest(int id)
         {
             User currentUser = OnlineUsers.GetSessionUser();
             return Json(DB.Friendships.DeclineFriendshipRequest(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult RemoveFriendshipRequest(int id)
         {
             User currentUser = OnlineUsers.GetSessionUser();
             return Json(DB.Friendships.RemoveFriendshipRequest(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult RemoveFriendship(int id)
         {
             User currentUser = OnlineUsers.GetSessionUser();
             return Json(DB.Friendships.RemoveFriendship(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         private bool FilterSearchAndFilter(User targetUser)
         {
             bool matchesFilter = false;
@@ -97,7 +92,7 @@ namespace ChatManager.Controllers
             
             return matchesFilter && targetUser.GetFullName().Contains((string)Session["searchQuery"]);
         }
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         private void SetFriendFilterBit(FriendFilters filter, bool check)
         {
             if (check)
@@ -109,55 +104,55 @@ namespace ChatManager.Controllers
                 Session["FriendFilters"] = (int)Session["FriendFilters"] & ~(int)filter;
             }
         }
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult SetFilterNotFriend(bool check)
         {
             SetFriendFilterBit(FriendFilters.NOT_FRIEND, check);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult SetFilterRequest(bool check)
         {
             SetFriendFilterBit(FriendFilters.REQUEST, check);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult SetFilterPending(bool check)
         {
             SetFriendFilterBit(FriendFilters.PENDING, check);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult SetFilterFriend(bool check)
         {
             SetFriendFilterBit(FriendFilters.FRIEND, check);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult SetFilterRefused(bool check)
         {
             SetFriendFilterBit(FriendFilters.REFUSED, check);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public JsonResult SetFilterBlocked(bool check)
         {
             SetFriendFilterBit(FriendFilters.BLOCKED, check);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public void Search(string text)
         {
             Session["searchQuery"] = text;
         }
 
-        [OnlineUsers.UserAccess]
+        [OnlineUsers.UserAccess(false)]
         public PartialViewResult GetFriendShipsStatus()
         {
             return PartialView(DB.Users.SortedUsers().Where(FilterSearchAndFilter));

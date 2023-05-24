@@ -44,7 +44,7 @@ class PartialRefresh {
                     },
                     401: function () {
                         if (EndSessionAction != "")
-                            window.location = EndSessionAction + "?message=Access illégal";
+                            window.location = EndSessionAction + "?message=Accès illégal";
                         else
                             alert("Illegal access!");
                     },
