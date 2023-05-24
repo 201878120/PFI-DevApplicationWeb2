@@ -478,16 +478,22 @@ input[type=checkbox] {
     align-items: center;
 }
 
-    .friendfilters input {
-        transform: scale(1.25);
-        margin: 0px;
-        padding: 0px;
-    }
+.friendfilters input {
+    transform: scale(1.25);
+    margin: 0px;
+    padding: 0px;
+}
 
-    .friendfilters label {
-        margin-top:5px;
-    }
+.friendfilters label {
+    margin-top:5px;
+}
 
 input[type=search]::-webkit-search-cancel-button {
     -webkit-appearance: searchfield-cancel-button;
+}
+
+.moderateMessageContainer {
+    display: grid;
+    grid-template-columns: 200px 200px auto auto;
+    align-items: center;
 }

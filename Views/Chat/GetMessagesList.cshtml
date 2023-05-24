@@ -5,7 +5,14 @@
     ChatManager.Models.User sendee = ChatManager.Models.DB.Users.FindUser(item.FromUserId);
     ChatManager.Models.User receivee = ChatManager.Models.DB.Users.FindUser(item.ToUserId);
 
-    <div>
-        @Helper.AvatarUser(sendee, "UserSmallAvatar") @Helper.AvatarUser(receivee, "UserSmallAvatar") @item.Content
+    <div class="moderateMessageContainer">
+        @Helper.AvatarUser(sendee, "UserSmallAvatar")
+        @Helper.AvatarUser(receivee, "UserSmallAvatar")
+        <span class='command icon fa fa-times-circle' url="/Chat/Delete/@item.Id" message='Effacer ce message' title='Effacer ce message' data-placement='bottom' />
+        <div class='sentLayout'>
+            <div class='sent' title='@item.WrittenDate.Hour:@item.WrittenDate.Minute' id='sent_@item.Id' utc='-4'>
+                <span>@Helper.ParseContent(item.Content)</span>
+            </div>
+        </div>
     </div>
 }

@@ -1,11 +1,4 @@
-﻿
-
-
-
-
-
-
-@helper AvatarProfilLink(ChatManager.Models.User user)
+﻿@helper AvatarProfilLink(ChatManager.Models.User user)
 {
     var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
     var avatarUrl = Url.Content(user.GetAvatarURL());

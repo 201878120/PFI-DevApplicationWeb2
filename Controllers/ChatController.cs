@@ -47,7 +47,7 @@ namespace ChatManager.Controllers
         {
             /*if (forceRefresh || DB.Messages.)
             {*/
-                return PartialView(DB.Messages.SortedMessages());
+                return PartialView(DB.Messages.SortedMessages().Reverse());
             /*}
             return null;*/
         }

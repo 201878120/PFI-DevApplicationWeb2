@@ -1,10 +1,11 @@
 ﻿@model IEnumerable<ChatManager.Models.Message>
 
 @{
-    ViewBag.Title = "ModerateMessages";
+    ViewBag.Title = "Conversations";
 }
 
-<h2>ModerateMessages</h2>
+<h2>Conversations</h2>
+<hr />
 
 <div class="main">
     <div id="MessagesContainer">
@@ -15,9 +16,14 @@
     @Scripts.Render("~/bundles/NotificationsHandler")
 
     <script defer>
-        let GetMessagesList = new PartialRefresh("@Url.Action("GetMessagesList")", "MessagesContainer", 5, UpdateCheckboxChangeCallback);
+        let messagesList = new PartialRefresh("@Url.Action("GetMessagesList")", "MessagesContainer", 5, UpdateMessagesCallback);
 
-        function UpdateCheckboxChangeCallback() {
+        function UpdateMessagesCallback() {
+            $(".command").click(function () {
+                var url = $(this).attr("url");
+                var message = $(this).attr("message");
+                messagesList.confirmedCommand(message, url);
+            });
         }
     </script>
 }
