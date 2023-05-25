@@ -201,7 +201,6 @@
     <Content Include="Images_Data\User_Avatars\768b51bb-bba6-4d8d-afbd-15a24ebd16f8.Jpeg" />
     <Content Include="Images_Data\User_Avatars\89ca9b58-9e3d-4c21-bb08-369f8f04b2fb.Jpeg" />
     <Content Include="Images_Data\User_Avatars\8e412968-fc77-41ee-849f-d9a7cbcdfb43.Jpeg" />
-    <Content Include="Images_Data\User_Avatars\99dc09c9-9cf7-44f5-938b-b9ccc90e22a0.Jpeg" />
     <Content Include="Images_Data\User_Avatars\no_avatar.png" />
     <Content Include="info-icon.png" />
     <Content Include="Scripts\bootbox.js" />
