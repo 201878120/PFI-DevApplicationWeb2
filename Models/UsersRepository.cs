@@ -100,17 +100,13 @@ namespace ChatManager.Models
         }
         private void RemoveMessages(int userId)
         {
-            List<Message> messagesSent = DB.Messages.ToList().Where(r => r.FromUserId == userId).ToList();
-            List<Message> messagesReceived = DB.Messages.ToList().Where(r => r.ToUserId == userId).ToList();
-            foreach (Message message in messagesSent) DB.Messages.Delete(message.Id);
-            foreach (Message message in messagesSent) DB.Messages.Delete(message.Id);
+            List<Message> messages = DB.Messages.ToList().Where(r => r.FromUserId == userId || r.ToUserId == userId).ToList();
+            foreach (Message message in messages) DB.Messages.Delete(message.Id);
         }
         private void RemoveFriendships(int userId)
         {
-            List<Friendship> friendsSent = DB.Friendships.ToList().Where(r => r.UserId == userId).ToList();
-            List<Friendship> friendsReceived = DB.Friendships.ToList().Where(r => r.TargetUserId == userId).ToList();
-            foreach (Friendship friend in friendsSent) DB.Messages.Delete(friend.Id);
-            foreach (Friendship friend in friendsReceived) DB.Messages.Delete(friend.Id);
+            List<Friendship> friendships = DB.Friendships.ToList().Where(r => r.UserId == userId || r.TargetUserId == userId).ToList();
+            foreach (Friendship friend in friendships) DB.Friendships.Delete(friend.Id);
         }
         public override bool Delete(int userId)
         {
