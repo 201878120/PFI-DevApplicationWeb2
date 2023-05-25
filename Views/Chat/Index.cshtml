@@ -54,10 +54,10 @@
             </div>
             <div class="sendMessageLayout" id="sendMessagePanel">
                 <input id="message"
-                        class="form-control"
-                        style="width:100% !important; max-width:1000px !important;"
-                        placeholder="Tapez votre message ici ..."
-                        title="Les urls d'image sont prises en compte.">
+                       class="form-control"
+                       style="width:100% !important; max-width:1000px !important;"
+                       placeholder="Tapez votre message ici ..."
+                       title="Les urls d'image sont prises en compte.">
                 <span id="send" class="icon fa fa-paper-plane" title="Envoyer" data-placement="bottom" />
             </div>
         </div>
@@ -66,6 +66,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/NotificationsHandler")
     <script defer>
         let friendsPanelUpdater = new PartialRefresh("/Chat/GetFriendsList", "friendsListContainer", 5, UpdateFriendsCallback);
         let messagesPanelUpdater = new PartialRefresh("/Chat/GetMessages", "messagesPanel", 5, UpdateMessagesCallback);

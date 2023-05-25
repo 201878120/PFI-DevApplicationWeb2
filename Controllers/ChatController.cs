@@ -70,6 +70,7 @@ namespace ChatManager.Controllers
             m.ToUserId = (int)Session["currentChattedId"];
             m.Content = message;
             DB.Messages.Create(m);
+            OnlineUsers.AddNotification(m.ToUserId, $"Nouveau message de {currentUser.GetFullName()}");
         }
 
         [HttpGet]

@@ -25,6 +25,7 @@ namespace ChatManager.Controllers
         public JsonResult SendFriendshipRequest(int id)
         {
             User currentUser = OnlineUsers.GetSessionUser();
+            OnlineUsers.AddNotification(id, $"{currentUser.GetFullName()} vous a envoyé une demande d'ami.");
             return Json(DB.Friendships.SendFriendshipRequest(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
@@ -32,6 +33,7 @@ namespace ChatManager.Controllers
         public JsonResult AcceptFriendshipRequest(int id)
         {
             User currentUser = OnlineUsers.GetSessionUser();
+            OnlineUsers.AddNotification(id, $"{currentUser.GetFullName()} a accepté votre demande d'ami.");
             return Json(DB.Friendships.AcceptFriendshipRequest(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
@@ -39,6 +41,7 @@ namespace ChatManager.Controllers
         public JsonResult DeclineFriendshipRequest(int id)
         {
             User currentUser = OnlineUsers.GetSessionUser();
+            OnlineUsers.AddNotification(id, $"{currentUser.GetFullName()} a décliné votre demande d'ami.");
             return Json(DB.Friendships.DeclineFriendshipRequest(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
@@ -53,6 +56,7 @@ namespace ChatManager.Controllers
         public JsonResult RemoveFriendship(int id)
         {
             User currentUser = OnlineUsers.GetSessionUser();
+            OnlineUsers.AddNotification(id, $"{currentUser.GetFullName()} vous a retiré.");
             return Json(DB.Friendships.RemoveFriendship(currentUser.Id, id), JsonRequestBehavior.AllowGet);
         }
 
